@@ -1,0 +1,34 @@
+services:
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb+srv://przray27:EbbcgnztDsLOHNyR@anfitrcluster.qzrsipn.mongodb.net/?retryWrites=true&w=majority&appName=AnfitrCluster
+      - DB_NAME=anfitr_db
+      - NODE_ENV=development
+      - PORT=3000
+    networks:
+      - app-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local
