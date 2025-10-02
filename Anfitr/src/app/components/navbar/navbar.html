@@ -1,0 +1,26 @@
+<nav class="bg-white text-principal font-normal">
+  <div class="container mx-auto flex items-center justify-between px-4 py-3">
+    <a class="text-principal text-3xl font-bold" href="#"><span>Anfi</span><span class="text-secundario">tr</span></a>
+
+    <button class="text-principal lg:hidden" type="button" onclick="document.getElementById('navbarNavDropdown').classList.toggle('hidden')">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <div class="hidden lg:flex" id="navbarNavDropdown">
+      <ul class="flex flex-col lg:flex-row lg:space-x-4">
+        @for(item of menuList; track $index){
+        <li>
+          <a class="block py-2 px-4 text-principal rounded transition-colors duration-200"
+             routerLinkActive="text-secundario"
+             [routerLink]="item.path">
+            {{ item.name }}
+          </a>
+        </li>
+        }
+      </ul>
+        <a href=""> <button class="bg-secundario text-white py-2 px-4 rounded ">Iniciar sesion</button></a>
+    </div>
+  </div>
+</nav>
