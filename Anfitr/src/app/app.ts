@@ -1,30 +1,26 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
-import { Navbar } from './components/navbar/navbar';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { filter } from 'rxjs/operators';
+import { RouterOutlet } from '@angular/router';
+import { Navbar } from './components/navbar/navbar';
+import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
+import { LoginModalComponent } from './components/login-modal/login-modal.component';
+import { RegisterModalComponent } from './components/crearcuenta-modal/crearcuenta-modal.component';
+import { ModalService } from './services/modal.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, CommonModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    Navbar,
+    AuthModalComponent,
+    LoginModalComponent,
+    RegisterModalComponent
+  ],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-
-export class App {
-  //Ocultar Navbar en login y crearcuenta
-  showNavbar = signal(true); // Usar signal para reactividad
-
-  constructor(private router: Router) {
-    // Escuchar cambios de ruta
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      // Lista de rutas donde NO se muestra la navbar
-      const hiddenRoutes = ['/login', '/crearcuenta'];
-      
-      // Actualizar el signal
-      this.showNavbar.set(!hiddenRoutes.includes(event.url));
-    });
-  }
+export class AppComponent {
+  constructor(public modalService: ModalService) {}
 }

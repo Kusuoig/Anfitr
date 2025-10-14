@@ -1,6 +1,9 @@
-<!-- Ocultar navbar en login y crearcuenta -->
-@if (showNavbar()) {
-  <app-navbar></app-navbar>
-}
-
+<!-- Tu contenido normal de la app -->
+<app-navbar></app-navbar>
 <router-outlet></router-outlet>
+
+<!-- Sistema de modales -->
+<app-auth-modal>
+  <app-login-modal *ngIf="(modalService.modalState$ | async) === 'login'"></app-login-modal>
+  <app-register-modal *ngIf="(modalService.modalState$ | async) === 'register'"></app-register-modal>
+</app-auth-modal>
