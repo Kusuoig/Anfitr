@@ -1,3 +1,99 @@
+<header class="bg-white shadow-sm py-4 px-6">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex items-center gap-8">
+            <button class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+                <span class="font-medium">Accesibilidad</span>
+            </button>
 
+            <div class="relative">
+                <button (click)="toggleContador($event)" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span class="font-medium">Personas</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
 
-<h1 class="text-secundario">holaaaaaa</h1>
+                <div *ngIf="mostrarContador" (click)="$event.stopPropagation()"
+                    class="absolute top-full left-0 mt-2 bg-white shadow-lg rounded-lg p-4 w-52 z-10 border">
+                    <div class="flex items-center justify-between">
+                        <span class="font-medium">Personas</span>
+                        <div class="flex items-center gap-3">
+                            <button (click)="decrementar()"
+                                class="px-2 rounded-full text-lg font-bold text-gray-500 hover:text-gray-900 hover:bg-gray-100">
+                                -
+                            </button>
+                            <span class="font-bold text-lg" style="color: #152C5B;">{{ contadorPersonas }}</span>
+                            <button (click)="incrementar()"
+                                class="px-2 rounded-full text-lg font-bold text-gray-500 hover:text-gray-900 hover:bg-gray-100">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow max-w-md">
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar por título (ej: Green Villa)"
+                class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        
+        <div *ngIf="propiedadesFiltradas.length === 0" class="col-span-4 text-center text-gray-500">
+            No se encontraron propiedades con ese título.
+        </div>
+
+        <div *ngFor="let prop of propiedadesFiltradas"
+            class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+            <img [src]="prop.imgUrl" [alt]="prop.titulo" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h3 class="font-semibold text-lg mb-1" style="color: #152C5B;">{{ prop.titulo }}</h3>
+                <p class="text-sm text-gray-500">{{ prop.ubicacion }}</p>
+            </div>
+        </div>
+
+    </div> <section class="bg-white rounded-lg shadow-md p-8 mb-8">
+        <h2 class="text-3xl font-bold mb-6" style="color: #152C5B;">Acerca de nosotros</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+            Estamos comprometidos a brindar las mejores experiencias de alojamiento para nuestros huéspedes. Nuestra
+            plataforma conecta a viajeros con propiedades únicas en todo el mundo, desde villas de lujo hasta
+            acogedoras casas de campo. Nos esforzamos por ofrecer un servicio excepcional y garantizar que cada
+            estancia sea memorable.
+        </p>
+        <p class="text-gray-700 leading-relaxed">
+            Ya garantizamos camas confortables, áreas de trabajo funcionales, y amenidades modernas. Todo dentro de
+            un entorno ideal pensado para ofrecer la máxima comodidad a nuestros huéspedes. Además, nuestro equipo
+            está disponible las 24 horas del día para asistir con cualquier necesidad durante su estadía. Estamos
+            dispuestos para ayudarle con recomendaciones locales y asegurar que su estancia en nuestro servicio sea
+            perfecta.
+        </p>
+    </section>
+
+    <section class="bg-white rounded-lg shadow-md p-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <h3 class="text-2xl font-bold mb-2" style="color: #152C5B;">Anfitr.</h3>
+                <p class="text-gray-600">Comparte tu espacio con viajeros</p>
+            </div>
+            <div class="text-center md:text-right">
+                <p class="text-gray-700 mb-3 font-medium">Regístrate hoy haciendo</p>
+                <button class="px-8 py-3 rounded-md font-semibold text-white hover:opacity-90 transition-opacity"
+                    style="background-color: #3252DF;">
+                    Comenzar ahora
+                </button>
+            </div>
+        </div>
+    </section>
+</main>
