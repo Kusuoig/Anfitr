@@ -12,13 +12,16 @@
       <!-- Título centrado dentro de su área -->
       <h2 class="text-[40px] font-medium text-center mb-6">Ingresar</h2>
 
-      <form>
+      <form (ngSubmit)="login()">
         <!-- Usuario -->
         <div class="mb-4">
-          <label class="block text-[24px] font-normal mb-1">Usuario</label>
+          <label class="block text-[24px] font-normal mb-1">Usuario (Email)</label>
           <input
-            type="text"
-            placeholder="Usuario"
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="ejemplo@correo.com"
+            required
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003DFC] placeholder-[#D2D2D2] text-[22px]"
           />
         </div>
@@ -28,7 +31,10 @@
           <label class="block text-[24px] font-normal mb-1">Contraseña</label>
           <input
             [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="password"
+            name="password"
             placeholder="8+ caracteres"
+            required
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003DFC] placeholder-[#D2D2D2] text-[22px]"
           />
           <button
@@ -39,10 +45,21 @@
           </button>
         </div>
 
+        <!-- Mensaje de error -->
+        <p *ngIf="errorMessage" class="text-red-500 text-sm mb-2">{{ errorMessage }}</p>
+
         <!-- Términos -->
         <p class="text-[15px] text-black mb-4">
           Al ingresar aceptas los términos y condiciones La Salle Oaxaca.
         </p>
+
+        <!-- Usuarios de prueba -->
+        <div class="bg-gray-100 p-3 rounded-lg mb-4">
+          <p class="text-xs font-semibold mb-1">Usuarios de prueba:</p>
+          <p class="text-xs">juan@example.com / 123456</p>
+          <p class="text-xs">maria@example.com / 123456</p>
+          <p class="text-xs">carlos@example.com / 123456</p>
+        </div>
 
         <!-- Botón Ingresar -->
         <button

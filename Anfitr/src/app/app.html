@@ -1,9 +1,19 @@
-<!-- Tu contenido normal de la app -->
-<app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<div class="min-h-screen flex flex-col">
+  <!-- Tu contenido normal de la app -->
+  <app-navbar></app-navbar>
+  <div class="flex-grow">
+    <router-outlet></router-outlet>
+  </div>
 
-<!-- Sistema de modales -->
-<app-auth-modal>
-  <app-login-modal *ngIf="(modalService.modalState$ | async) === 'login'"></app-login-modal>
-  <app-register-modal *ngIf="(modalService.modalState$ | async) === 'register'"></app-register-modal>
-</app-auth-modal>
+  <!-- Sistema de modales -->
+  <app-auth-modal>
+    <app-login-modal *ngIf="(modalService.modalState$ | async) === 'login'"></app-login-modal>
+    <app-register-modal *ngIf="(modalService.modalState$ | async) === 'register'"></app-register-modal>
+  </app-auth-modal>
+
+  <!-- Modal de Registrar Departamento -->
+  <app-registrar-departamento *ngIf="(modalService.modalState$ | async) === 'registrar-departamento'"></app-registrar-departamento>
+
+  <!-- Modal de Confirmación -->
+  <app-confirmacion-modal *ngIf="(modalService.modalState$ | async) === 'confirmacion'"></app-confirmacion-modal>
+</div>

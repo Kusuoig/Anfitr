@@ -1,0 +1,28 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-2xl p-12 max-w-md w-full text-center">
+    <!-- Palomita Verde -->
+    <div class="mb-6 flex justify-center">
+      <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center">
+        <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Mensaje -->
+    <h2 class="text-2xl font-bold mb-2" style="color: #152C5B;">
+      ¡Departamento registrado correctamente!
+    </h2>
+    <p class="text-gray-600 mb-8">
+      Tu propiedad ha sido registrada exitosamente.
+    </p>
+
+    <!-- Botón -->
+    <button
+      (click)="cerrarYVolverInicio()"
+      class="px-8 py-3 rounded-md font-semibold text-white hover:opacity-90 transition-opacity w-full"
+      style="background-color: #3252DF;">
+      Regresar al inicio
+    </button>
+  </div>
+</div>

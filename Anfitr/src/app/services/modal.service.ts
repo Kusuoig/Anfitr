@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-export type ModalType = 'login' | 'register' | null;
+export type ModalType = 'login' | 'register' | 'registrar-departamento' | 'confirmacion' | null;
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,14 @@ export class ModalService {
 
   openRegister() {
     this.modalState.next('register');
+  }
+
+  openRegistrarDepartamento() {
+    this.modalState.next('registrar-departamento');
+  }
+
+  openConfirmacion() {
+    this.modalState.next('confirmacion');
   }
 
   close() {

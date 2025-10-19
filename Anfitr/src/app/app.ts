@@ -5,6 +5,8 @@ import { Navbar } from './components/navbar/navbar';
 import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
 import { LoginModalComponent } from './components/login-modal/login-modal.component';
 import { RegisterModalComponent } from './components/crearcuenta-modal/crearcuenta-modal.component';
+import { RegistrarDepartamento } from './components/registrar-departamento/registrar-departamento';
+import { ConfirmacionModal } from './components/confirmacion-modal/confirmacion-modal';
 import { ModalService } from './services/modal.service';
 
 @Component({
@@ -16,10 +18,11 @@ import { ModalService } from './services/modal.service';
     Navbar,
     AuthModalComponent,
     LoginModalComponent,
-    RegisterModalComponent
+    RegisterModalComponent,
+    RegistrarDepartamento,
+    ConfirmacionModal
   ],
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  templateUrl: './app.html'
 })
 export class AppComponent {
   constructor(public modalService: ModalService) {}

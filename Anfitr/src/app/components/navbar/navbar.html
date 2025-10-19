@@ -1,36 +1,94 @@
-<nav class="bg-white text-principal font-normal">
-  <div class="container mx-auto flex items-center justify-between px-4 py-3">
-    <a class="text-principal text-3xl font-bold" href="#"><span>Anfi</span><span class="text-secundario">tr</span></a>
+<nav class="bg-white text-principal font-normal shadow-sm  w-full top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between py-3 sm:py-4">
+      <!-- Logo -->
+      <a class="text-principal text-2xl sm:text-3xl font-bold" href="#">
+        <span>Anfi</span><span class="text-secundario">tr</span>
+      </a>
 
-    <button class="text-principal lg:hidden" type="button" onclick="document.getElementById('navbarNavDropdown').classList.toggle('hidden')">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
+      <button
+        class="text-principal lg:hidden p-2"
+        type="button"
+        (click)="toggleMobileMenu()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
 
-    <div class="hidden lg:flex" id="navbarNavDropdown">
-      <ul class="flex flex-col lg:flex-row lg:space-x-4">
+      <!-- Menú desktop -->
+      <div class="hidden lg:flex items-center gap-4">
+        <ul class="flex space-x-1">
+          @for(item of menuList; track $index){
+          <li>
+            <a class="block py-2 px-3 text-principal rounded transition-colors duration-200 hover:bg-gray-100"
+               routerLinkActive="text-secundario font-semibold"
+               [routerLink]="item.path">
+              {{ item.name }}
+            </a>
+          </li>
+          }
+        </ul>
+
+        <!-- Botón de login o perfil según el estado -->
+        <div *ngIf="!usuarioActual">
+          <button
+            class="bg-secundario text-white py-2 px-4 rounded cursor-pointer hover:bg-opacity-90 transition whitespace-nowrap"
+            (click)="openLoginModal()">
+            Iniciar sesión
+          </button>
+        </div>
+
+        <div *ngIf="usuarioActual" class="flex items-center gap-3">
+          <button
+            (click)="irAPerfil()"
+            class="flex items-center gap-2 hover:opacity-80 transition">
+            <img
+              [src]="usuarioActual.fotoPerfil"
+              [alt]="usuarioActual.nombre"
+              class="w-10 h-10 rounded-full object-cover border-2 border-gray-300">
+            <span class="font-medium text-principal hidden xl:inline">{{ usuarioActual.nombre }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div
+      [class.hidden]="!isMobileMenuOpen"
+      class="lg:hidden pb-4 border-t border-gray-200">
+      <ul class="space-y-1 pt-4">
         @for(item of menuList; track $index){
         <li>
-          <a class="block py-2 px-4 text-principal rounded transition-colors duration-200"
-             routerLinkActive="text-secundario"
-             [routerLink]="item.path">
+          <a class="block py-2 px-4 text-principal rounded transition-colors duration-200 hover:bg-gray-100"
+             routerLinkActive="text-secundario font-semibold"
+             [routerLink]="item.path"
+             (click)="closeMobileMenu()">
             {{ item.name }}
           </a>
         </li>
         }
       </ul>
-        <!--<a href=""> <button class="bg-secundario text-white py-2 px-4 rounded ">Iniciar sesion</button></a>
+
+      <!-- Botón de login o perfil en móvil -->
+      <div class="mt-4 px-4" *ngIf="!usuarioActual">
         <button
-          class="bg-secundario text-white py-2 px-4 rounded cursor-pointer"
-          [routerLink]="'/login'"
-        >--->
-        <button
-          class="bg-secundario text-white py-2 px-4 rounded cursor-pointer hover:bg-opacity-90 transition"
-          (click)="openLoginModal()"
-        >
+          class="w-full bg-secundario text-white py-2 px-4 rounded cursor-pointer hover:bg-opacity-90 transition"
+          (click)="openLoginModal(); closeMobileMenu()">
           Iniciar sesión
         </button>
+      </div>
+
+      <div class="mt-4 px-4" *ngIf="usuarioActual">
+        <button
+          (click)="irAPerfil(); closeMobileMenu()"
+          class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition">
+          <img
+            [src]="usuarioActual.fotoPerfil"
+            [alt]="usuarioActual.nombre"
+            class="w-12 h-12 rounded-full object-cover border-2 border-gray-300">
+          <span class="font-medium text-principal">{{ usuarioActual.nombre }}</span>
+        </button>
+      </div>
     </div>
   </div>
 </nav>
