@@ -13,9 +13,9 @@ export const routes: Routes = [
   { path: 'inicio',
     component: Inicio
   },
-  { path: 'acercade',
-    component: Acercade
-  },
+  // { path: 'acercade',
+  //   component: Acercade
+  // },
   {
     path: 'contacto',
     component: Contacto

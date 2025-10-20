@@ -19,7 +19,6 @@ export class Navbar implements OnInit {
  menuList: menuItem[] = [
     { name: 'Inicio', path: 'inicio' },
     { name: 'Acerca de', path: 'acercade' },
-    { name: 'Contacto', path: 'contacto' },
   ];
 
   usuarioActual: Usuario | null = null;
@@ -74,6 +73,13 @@ export class Navbar implements OnInit {
     this.mostrarMenuPerfil = false;
     if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
       this.authService.logout();
+    }
+  }
+
+  scrollToSection(sectionId: string) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 }

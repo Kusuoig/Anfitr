@@ -63,16 +63,16 @@
           </p>
         </div>
 
-        <div class="w-full lg:w-auto text-center lg:text-right  p-4 rounded-lg lg:ml-6">
-          <div class="mb-3 sm:mb-4">
-            <span class="text-2xl sm:text-3xl font-bold" style="color: #1ABC9C;">${{ propiedad?.precio }} MXN</span>
-            <span class="text-gray-500 text-xs sm:text-sm block mt-1">por día</span>
+        <div class="w-full flex-1 lg:w-auto text-center lg:text-right  p-4 rounded-lg lg:ml-6">
+          <div class="mb-3 ml-45 sm:mb-4 flex">
+            <span class="text-2xl pt-1 sm:text-2xl font-bold" style="color: #1ABC9C;">${{ propiedad?.precio }} MXN</span>
+            <span class="text-gray-500 pl-2 text-xl block mt-1">por día</span>
           </div>
           <button
             (click)="irAPagos()"
-            class="w-full lg:w-auto px-6 sm:px-8 py-2 sm:py-3 rounded-md font-semibold text-white hover:opacity-90 transition-opacity text-sm sm:text-base"
+            class="w-full cursor-pointer mr-40 lg:w-55  px-6 sm:px-8  rounded-md font-semibold text-white hover:opacity-90 transition-opacity text-sm sm:text-base"
             style="background-color: #3252DF;">
-            Reservar
+            Reservar ahora
           </button>
         </div>
       </div>

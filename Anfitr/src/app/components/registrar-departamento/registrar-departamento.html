@@ -43,7 +43,7 @@
             type="text"
             [(ngModel)]="nombrePropiedad"
             name="nombrePropiedad"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Ej: Departamento en el centro">
         </div>
 
@@ -55,7 +55,7 @@
             type="text"
             [(ngModel)]="direccion"
             name="direccion"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Calle y número">
         </div>
 
@@ -68,7 +68,7 @@
               type="text"
               [(ngModel)]="ciudad"
               name="ciudad"
-              class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Ciudad">
           </div>
 
@@ -80,7 +80,7 @@
               type="text"
               [(ngModel)]="codigoPostal"
               name="codigoPostal"
-              class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="12345">
           </div>
         </div>
@@ -93,7 +93,7 @@
             [(ngModel)]="descripcion"
             name="descripcion"
             rows="4"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Describe tu propiedad..."></textarea>
         </div>
 
@@ -102,7 +102,7 @@
             type="button"
             (click)="siguientePaso()"
             [disabled]="!validarPaso1()"
-            [class]="validarPaso1() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed'"
+            [class]="validarPaso1() ? 'bg-blue-500 hover:bg-blue-600 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
             class="px-8 py-3 rounded-md font-semibold text-white transition-colors">
             Siguiente
           </button>
@@ -120,7 +120,7 @@
               type="number"
               [(ngModel)]="precioNoche"
               name="precioNoche"
-              class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="$1000">
           </div>
 
@@ -132,7 +132,7 @@
               type="number"
               [(ngModel)]="numeroHabitaciones"
               name="numeroHabitaciones"
-              class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="2">
           </div>
 
@@ -144,7 +144,7 @@
               type="number"
               [(ngModel)]="numeroBanos"
               name="numeroBanos"
-              class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="1">
           </div>
         </div>
@@ -157,7 +157,7 @@
             type="file"
             (change)="onFileSelected($event, 1)"
             accept="image/*"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
           <p *ngIf="nombreImagen1" class="text-sm text-gray-600 mt-1">{{ nombreImagen1 }}</p>
         </div>
 
@@ -169,7 +169,7 @@
             type="file"
             (change)="onFileSelected($event, 2)"
             accept="image/*"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
           <p *ngIf="nombreImagen2" class="text-sm text-gray-600 mt-1">{{ nombreImagen2 }}</p>
         </div>
 
@@ -181,7 +181,7 @@
             type="file"
             (change)="onFileSelected($event, 3)"
             accept="image/*"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
           <p *ngIf="nombreImagen3" class="text-sm text-gray-600 mt-1">{{ nombreImagen3 }}</p>
         </div>
 
@@ -189,7 +189,7 @@
           <button
             type="button"
             (click)="pasoAnterior()"
-            class="px-8 py-3 rounded-md font-semibold text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors">
+            class="px-8 py-3 rounded-md font-semibold text-gray-700 border border-gray-300 hover:bg-gray-50 cursor-pointer transition-colors">
             Atrás
           </button>
 
@@ -197,7 +197,7 @@
             type="button"
             (click)="registrarDepartamento()"
             [disabled]="!validarPaso2()"
-            [class]="validarPaso2() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed'"
+            [class]="validarPaso2() ? 'bg-blue-500 hover:bg-blue-600 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
             class="px-8 py-3 rounded-md font-semibold text-white transition-colors">
             Registrar
           </button>

@@ -19,8 +19,7 @@ interface Reserva {
   selector: 'app-reservas',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './reservas.component.html',
-  styleUrls: ['./reservas.component.css']
+  templateUrl: './reservas.component.html'
 })
 export class ReservasComponent implements OnInit {
   usuario = {
@@ -30,13 +29,13 @@ export class ReservasComponent implements OnInit {
 
   busqueda: string = '';
   mostrarMenuPerfil: boolean = false;
-  
+
   reservas: Reserva[] = [
     {
       id: '1',
       nombre: 'Blue Origin Farms',
       ubicacion: 'South of Legazpi',
-      imagen: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+      imagen: 'https://a0.muscache.com/im/pictures/airflow/Hosting-33213510/original/80972a2f-7c48-426d-9035-de0675329db6.jpg?im_w=720',
       fechaInicio: '20 Enero',
       fechaFin: '22 Enero',
       dias: 3,
@@ -78,8 +77,8 @@ export class ReservasComponent implements OnInit {
     }
   }
 
-  nuevaReserva() {
-    console.log('Crear nueva reserva');
+  volverInicio() {
+    window.location.href = '/';
   }
 
   toggleMenuPerfil() {
