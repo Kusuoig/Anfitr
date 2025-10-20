@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Navbar simple -->
+  <nav class="bg-white shadow-sm py-4">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h1 class="text-3xl font-bold">
+        <span style="color: #152C5B;">Anfi</span><span style="color: #3252DF;">tr</span>
+      </h1>
+    </div>
+  </nav>
+
+  <!-- Contenido centrado -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Indicador de pasos -->
+    <div class="flex items-center justify-center mb-8">
+      <div class="flex items-center">
+        <!-- Paso 1 - Completado -->
+        <div class="flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-[#1ABC9C] flex items-center justify-center text-white font-bold">
+            ✓
+          </div>
+          <span class="text-xs mt-1 text-gray-600">Reserva</span>
+        </div>
+
+        <!-- Línea -->
+        <div class="w-24 h-1 bg-[#1ABC9C] mx-2"></div>
+
+        <!-- Paso 2 - Completado -->
+        <div class="flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-[#1ABC9C] flex items-center justify-center text-white font-bold">
+            ✓
+          </div>
+          <span class="text-xs mt-1 text-gray-600">Pago</span>
+        </div>
+
+        <!-- Línea -->
+        <div class="w-24 h-1 bg-[#1ABC9C] mx-2"></div>
+
+        <!-- Paso 3 - Completado -->
+        <div class="flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-[#1ABC9C] flex items-center justify-center text-white font-bold">
+            ✓
+          </div>
+          <span class="text-xs mt-1 text-gray-600">Confirmación</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Título -->
+    <h2 class="text-3xl font-bold text-center mb-8" style="color: #152C5B;">
+      Pago completado
+    </h2>
+
+    <!-- Container principal -->
+    <div class="mx-auto bg-white rounded-lg shadow-lg p-12 text-center" style="width: 1000px; min-height: 300px;">
+      <!-- Ícono de éxito -->
+      <div class="flex justify-center mb-6">
+        <div class="w-24 h-24 rounded-full bg-[#1ABC9C] flex items-center justify-center">
+          <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Mensaje -->
+      <p class="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+        Por favor revise su <span class="font-semibold">correo</span> y <span class="font-semibold">teléfono</span> donde hemos enviado la información de su pago.
+      </p>
+    </div>
+
+    <!-- Botón -->
+    <div class="flex justify-center mt-8">
+      <button
+        (click)="volverAlInicio()"
+        class="px-12 py-3 rounded-lg font-semibold cursor-pointer text-white text-lg hover:opacity-90 transition-opacity"
+        style="background-color: #3252DF;">
+        Volver al inicio
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="min-h-screen">
+  <nav class="bg-white shadow-sm py-4">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h1 class="text-3xl font-bold">
+        <span style="color: #152C5B;">Anfi</span><span style="color: #3252DF;">tr</span>
+      </h1>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex items-center justify-center mb-8">
+      <div class="flex items-center">
+        <div class="flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-[#1ABC9C] flex items-center justify-center text-white font-bold">1</div>
+        </div>
+        <div class="w-16 md:w-24 h-1 bg-gray-300 mx-2"></div> <div class="flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">2</div>
+        </div>
+        <div class="w-16 md:w-24 h-1 bg-gray-300 mx-2"></div> <div class="flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">3</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="text-2xl md:text-3xl font-bold text-center mb-8" style="color: #152C5B;">
+      Información de la reserva
+    </h2>
+
+    <div class="mx-auto overflow-hidden lg:ml-20 ">
+      <div class="flex flex-col md:flex-row h-full" >
+        <div class="w-full md:w-1/2 p-6 flex flex-col items-center justify-center">
+          <img
+            [src]="propiedad?.imgUrl"
+            [alt]="propiedad?.titulo"
+            class="w-full max-w-sm h-48 object-cover rounded-lg mb-4"> <h3 class="text-xl font-bold mb-1 text-center" style="color: #152C5B;">{{ propiedad?.titulo }}</h3>
+          <p class="text-sm text-gray-500 text-center">{{ propiedad?.ubicacion }}</p>
+        </div>
+
+        <div class="hidden md:block w-px bg-gray-300"></div>
+
+        <div class="w-full md:w-1/2 p-6 flex flex-col justify-center">
+          <div class="mb-6">
+            <label class="block text-sm font-semibold mb-2" style="color: #152C5B;">
+              Tiempo de estadía
+            </label>
+            <div class="flex items-center">
+              <button (click)="decrementarDias()" class="w-8 h-8 rounded-l-lg bg-[#E74C3C] text-white cursor-pointer hover:bg-red-200 flex items-center justify-center pb-1 font-bold text-2xl">-</button>
+              <div class="inline-flex items-center bg-gray-200 h-8">
+                <input [(ngModel)]="dias" (change)="onDiasChange()" min="1" class="w-16 text-center text-xl bg-transparent border-none focus:ring-0">
+              </div>
+              <button (click)="incrementarDias()" class="w-8 h-8 rounded-r-lg bg-[#1ABC9C] text-white cursor-pointer hover:bg-green-200 flex items-center justify-center pb-1 font-bold text-xl">+</button>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label class="block text-sm font-semibold mb-2" style="color: #152C5B;">
+              Fechas
+            </label>
+            <div class="flex flex-wrap items-center gap-3 mb-2">
+              <input type="date" [(ngModel)]="fechaInicio" (change)="onFechaInicioChange()" [min]="fechaInicio" class="border-2 border-gray-300 rounded-lg p-2">
+              <span class="text-gray-500">al</span>
+              <input type="date" [(ngModel)]="fechaFin" (change)="onFechaFinChange()" [min]="fechaInicio" class="border-2 border-gray-300 rounded-lg p-2">
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <div class="flex items-center">
+              <span class="text-lg md:text-xl font-semibold" style="color: #152C5B;">Monto total:</span>
+              <span class="text-lg md:text-xl pl-3 font-bold" style="color: #1ABC9C;">${{ precioTotal }} MXN</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">
+              ${{ propiedad?.precio }} MXN × {{ dias }} {{ textoDias }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center gap-3 mt-8">
+      <button (click)="reservarAhora()" class="w-full max-w-xs px-12 py-3 rounded-lg font-semibold cursor-pointer text-white text-lg hover:opacity-90 transition-opacity" style="background-color: #3252DF;">
+        Reservar ahora
+      </button>
+      <button (click)="cancelar()" class="px-12 py-3 text-gray-400 font-semibold text-md cursor-pointer hover:text-gray-300">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

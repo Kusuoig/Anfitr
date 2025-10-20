@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common'; // <-- IMPORTANTE para *ngIf y *
 import { FormsModule } from '@angular/forms';   // <-- IMPORTANTE para [(ngModel)]
 import { Router } from '@angular/router';
 import { Footer } from '../footer/footer';
-
+import { Navbar } from '../navbar/navbar';
 @Component({
   selector: 'app-inicio',
   // Aquí importamos los módulos que el HTML necesita
   imports: [
     CommonModule,
     FormsModule,
-    Footer
+    Footer,
+    Navbar
   ],
   standalone: true, // <-- Asegúrate de que esto esté aquí
   templateUrl: './inicio.html'

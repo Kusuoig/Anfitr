@@ -7,7 +7,7 @@ import { Footer } from '../footer/footer';
 @Component({
   selector: 'app-detalles-cuarto',
   standalone: true,
-  imports: [CommonModule, Footer],
+  imports: [CommonModule, Footer, Navbar],
   templateUrl: './detalles-cuarto.html'
 })
 export class DetallesCuarto implements OnInit {
@@ -119,7 +119,16 @@ export class DetallesCuarto implements OnInit {
   }
 
   irAPagos() {
-    // Por ahora solo navega, no hay funcionalidad
-    console.log('Ir a pagos - Sin funcionalidad');
+    if (this.propiedad) {
+      this.router.navigate(['/reserva-paso1'], {
+        queryParams: {
+          id: this.propiedad.id,
+          titulo: this.propiedad.titulo,
+          ubicacion: this.propiedad.ubicacion,
+          precio: this.propiedad.precio,
+          imgUrl: this.propiedad.imgUrl
+        }
+      });
+    }
   }
 }
