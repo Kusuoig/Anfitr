@@ -24,10 +24,12 @@ export class Navbar implements OnInit {
 
   usuarioActual: Usuario | null = null;
   isMobileMenuOpen: boolean = false;
+  mostrarMenuPerfil: boolean = false;
 
   constructor(
     private modalService: ModalService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,11 +50,30 @@ export class Navbar implements OnInit {
     this.modalService.openLogin();
   }
 
+  toggleMenuPerfil() {
+    this.mostrarMenuPerfil = !this.mostrarMenuPerfil;
+  }
+
   irAPerfil() {
-    console.log('Ir a perfil - Sin funcionalidad');
+    this.mostrarMenuPerfil = false;
+    // Navegar a perfil según el rol
+    if (this.usuarioActual?.rol === 'host') {
+      this.router.navigate(['/mis-habitaciones']);
+    } else {
+      this.router.navigate(['/reservas']);
+    }
+  }
+
+  irAConfiguracion() {
+    this.mostrarMenuPerfil = false;
+    console.log('Ir a configuración');
+    // this.router.navigate(['/configuracion']);
   }
 
   cerrarSesion() {
-    this.authService.logout();
+    this.mostrarMenuPerfil = false;
+    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+      this.authService.logout();
+    }
   }
 }

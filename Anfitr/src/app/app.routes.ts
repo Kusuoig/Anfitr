@@ -6,6 +6,8 @@ import { DetallesCuarto } from './components/detalles-cuarto/detalles-cuarto';
 import { ReservaPaso1 } from './components/reserva-paso1/reserva-paso1';
 import { ReservaPaso2 } from './components/reserva-paso2/reserva-paso2';
 import { ReservaConfirmacion } from './components/reserva-paso3/reserva-confirmacion';
+import { ReservasComponent } from './components/reservas/reservas.component';
+import { MisHabitacionesComponent } from './components/mis-habitaciones/mis-habitaciones.component';
 
 export const routes: Routes = [
   { path: 'inicio',
@@ -33,6 +35,14 @@ export const routes: Routes = [
   {
     path: 'reserva-confirmacion',
     component: ReservaConfirmacion
+  },
+  {
+    path: 'reservas',
+    component: ReservasComponent
+  },
+  {
+    path: 'mis-habitaciones',
+    component: MisHabitacionesComponent
   },
   { path: '**',
     component: Inicio

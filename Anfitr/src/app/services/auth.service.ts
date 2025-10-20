@@ -8,6 +8,7 @@ export interface Usuario {
   email: string;
   password: string;
   fotoPerfil: string;
+  rol?: 'guest' | 'host' | 'admin';
 }
 
 @Injectable({
@@ -20,21 +21,24 @@ export class AuthService {
       nombre: 'Juan Pérez',
       email: 'juan@example.com',
       password: '123456',
-      fotoPerfil: 'https://i.pravatar.cc/150?img=12'
+      fotoPerfil: 'https://i.pravatar.cc/150?img=12',
+      rol: 'guest'
     },
     {
       id: 2,
       nombre: 'María González',
       email: 'maria@example.com',
       password: '123456',
-      fotoPerfil: 'https://i.pravatar.cc/150?img=5'
+      fotoPerfil: 'https://i.pravatar.cc/150?img=5',
+      rol: 'host'
     },
     {
       id: 3,
       nombre: 'Carlos Rodríguez',
       email: 'carlos@example.com',
       password: '123456',
-      fotoPerfil: 'https://i.pravatar.cc/150?img=33'
+      fotoPerfil: 'https://i.pravatar.cc/150?img=33',
+      rol: 'admin'
     }
   ];
 
@@ -74,6 +78,15 @@ export class AuthService {
     this.usuarioActualSubject.next(null);
     if (this.isBrowser) {
       localStorage.removeItem('usuarioActual');
+    }
+  }
+
+  cerrarSesion() {
+    this.logout();
+    console.log('Cerrando sesión...');
+    // Redirigir al login
+    if (this.isBrowser) {
+      window.location.href = '/login';
     }
   }
 
