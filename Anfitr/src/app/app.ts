@@ -15,7 +15,6 @@ import { ModalService } from './services/modal.service';
   imports: [
     CommonModule,
     RouterOutlet,
-    Navbar,
     AuthModalComponent,
     LoginModalComponent,
     RegisterModalComponent,

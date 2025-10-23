@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { ModalService } from '../../services/modal.service';
+import { AuthService, Usuario } from '../../services/auth.service';
+
 
 interface Reserva {
   id: string;
@@ -22,10 +24,7 @@ interface Reserva {
   templateUrl: './reservas.component.html'
 })
 export class ReservasComponent implements OnInit {
-  usuario = {
-    nombre: 'Juan Perez',
-    rol: 'User'
-  };
+  usuarioActual: Usuario | null = null;
 
   busqueda: string = '';
   mostrarMenuPerfil: boolean = false;
@@ -50,6 +49,7 @@ export class ReservasComponent implements OnInit {
 
   ngOnInit() {
     this.reservasFiltradas = this.reservas;
+    this.usuarioActual = this.authService.getUsuarioActual();
   }
 
   buscarReservas() {

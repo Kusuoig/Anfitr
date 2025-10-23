@@ -1,52 +1,38 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Usuario {
-  id: number;
+  id: string;
   nombre: string;
   email: string;
-  password: string;
-  fotoPerfil: string;
+  telefono?: string;
+  fotoPerfil?: string;
   rol?: 'guest' | 'host' | 'admin';
+  fechaRegistro?: Date;
+}
+
+interface LoginResponse {
+  success: boolean;
+  message: string;
+  data: Usuario;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private usuariosMock: Usuario[] = [
-    {
-      id: 1,
-      nombre: 'Juan Pérez',
-      email: 'juan@example.com',
-      password: '123456',
-      fotoPerfil: 'https://i.pravatar.cc/150?img=12',
-      rol: 'guest'
-    },
-    {
-      id: 2,
-      nombre: 'María González',
-      email: 'maria@example.com',
-      password: '123456',
-      fotoPerfil: 'https://i.pravatar.cc/150?img=5',
-      rol: 'host'
-    },
-    {
-      id: 3,
-      nombre: 'Carlos Rodríguez',
-      email: 'carlos@example.com',
-      password: '123456',
-      fotoPerfil: 'https://i.pravatar.cc/150?img=33',
-      rol: 'admin'
-    }
-  ];
-
+  private apiUrl = environment.apiUrl;
   private usuarioActualSubject = new BehaviorSubject<Usuario | null>(null);
   public usuarioActual$ = this.usuarioActualSubject.asObservable();
   private isBrowser: boolean;
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) platformId: Object,
+    private http: HttpClient
+  ) {
     this.isBrowser = isPlatformBrowser(platformId);
 
     // Verificar si hay un usuario guardado en localStorage solo en el navegador
@@ -58,20 +44,55 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): boolean {
-    const usuario = this.usuariosMock.find(
-      u => u.email === email && u.password === password
-    );
+  login(email: string, password: string): Observable<{success: boolean, message?: string}> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/users/login`, { email, password })
+      .pipe(
+        map(response => {
+          if (response.success && response.data) {
+            // Guardar usuario en el estado y localStorage
+            this.usuarioActualSubject.next(response.data);
+            if (this.isBrowser) {
+              localStorage.setItem('usuarioActual', JSON.stringify(response.data));
+            }
+            return { success: true };
+          }
+          return { success: false, message: response.message };
+        }),
+        catchError(error => {
+          console.error('Error en login:', error);
+          const message = error.error?.message || 'Error al iniciar sesión. Por favor, intenta de nuevo.';
+          return of({ success: false, message });
+        })
+      );
+  }
 
-    if (usuario) {
-      this.usuarioActualSubject.next(usuario);
-      if (this.isBrowser) {
-        localStorage.setItem('usuarioActual', JSON.stringify(usuario));
-      }
-      return true;
-    }
-
-    return false;
+  register(userData: {
+    nombre: string;
+    email: string;
+    password: string;
+    telefono?: string;
+    nombreUsuario?: string;
+    rol?: 'guest' | 'host' | 'admin';
+  }): Observable<{success: boolean, message?: string, data?: Usuario}> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/users/register`, userData)
+      .pipe(
+        map(response => {
+          if (response.success && response.data) {
+            // Automáticamente loguear al usuario después del registro
+            this.usuarioActualSubject.next(response.data);
+            if (this.isBrowser) {
+              localStorage.setItem('usuarioActual', JSON.stringify(response.data));
+            }
+            return { success: true, data: response.data };
+          }
+          return { success: false, message: response.message };
+        }),
+        catchError(error => {
+          console.error('Error en registro:', error);
+          const message = error.error?.message || 'Error al registrar usuario. Por favor, intenta de nuevo.';
+          return of({ success: false, message });
+        })
+      );
   }
 
   logout(): void {

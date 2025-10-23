@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, Usuario } from '../../services/auth.service';
 
 interface Habitacion {
   id: string;
@@ -39,10 +39,8 @@ interface FormularioHabitacion {
 
 })
 export class MisHabitacionesComponent implements OnInit {
-  usuario = {
-    nombre: 'Paco El Chato',
-    rol: 'Host'
-  };
+
+  usuarioActual: Usuario | null = null;
 
   busqueda: string = '';
   mostrarMenuPerfil: boolean = false;
@@ -94,6 +92,7 @@ export class MisHabitacionesComponent implements OnInit {
 
   ngOnInit() {
     this.habitacionesFiltradas = this.habitaciones;
+    this.usuarioActual = this.authService.getUsuarioActual();
   }
 
   buscarHabitaciones() {

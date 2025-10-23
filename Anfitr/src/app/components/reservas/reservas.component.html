@@ -4,7 +4,7 @@
         <div class="mb-12">
             <a href="/" class="cursor-pointer">
                 <h1 class="text-3xl font-semibold">
-                    <span style="color: #152C5B;">Anfi</span><span style="color: #3252DF;">tr</span>
+                    <span style="color: #152C5B;">Anfitr</span><span style="color: #3252DF;">tr</span>
                 </h1>
             </a>
         </div>
@@ -29,18 +29,18 @@
 
         <header class="flex justify-between items-center mb-8">
             <div>
-                <h2 class="text-2xl font-semibold mb-1" style="color: #152C5B;">Hola {{usuario.nombre}}</h2>
+                <h2 class="text-2xl font-semibold mb-1" style="color: #152C5B;">Hola {{usuarioActual?.nombre}}</h2>
                 <p class="text-gray-400">Que tengas un buen día</p>
             </div>
 
             <div class="relative">
                 <div class="flex items-center gap-4 cursor-pointer px-4 py-2 rounded-lg hover:bg-gray-50 transition-all" (click)="toggleMenuPerfil()">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                        {{usuario.nombre.charAt(0)}}
+                        <img class="w-14 h-12 rounded-full object-cover border-2 border-gray-300" [src]="usuarioActual?.fotoPerfil" alt="{{usuarioActual?.nombre}}">
                     </div>
                     <div class="flex flex-col">
-                        <span class="font-semibold" style="color: #152C5B;">{{usuario.nombre}}</span>
-                        <span class="text-sm text-gray-400">{{usuario.rol}}</span>
+                        <span class="font-semibold" style="color: #152C5B;">{{usuarioActual?.nombre}}</span>
+                        <span class="text-sm text-gray-400">{{usuarioActual?.rol}}</span>
                     </div>
                     <span class="text-xs text-gray-600 transition-transform" [class.rotate-180]="mostrarMenuPerfil">▼</span>
                 </div>
@@ -99,7 +99,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:-translate-y-2 hover:shadow-2xl transition-all cursor-pointer" *ngFor="let reserva of reservasFiltradas">
                     <div class="relative h-52 overflow-hidden">
-                        <img [src]="reserva.imagen" [alt]="reserva.nombre" class="w-full h-full object-cover" />
+                        <img [src]="reserva.imagen" class="w-full h-full object-cover" />
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-6">
                             <h4 class="text-xl font-semibold mb-1">{{reserva.nombre}}</h4>
                             <p class="opacity-90">{{reserva.ubicacion}}</p>

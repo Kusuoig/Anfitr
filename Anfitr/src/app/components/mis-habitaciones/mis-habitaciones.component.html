@@ -5,7 +5,7 @@
     <div class="mb-12">
       <a href="/" class="cursor-pointer">
         <h1 class="text-3xl font-semibold">
-          <span style="color: #152C5B;">Anfi</span><span style="color: #3252DF;">tr</span>
+          <span style="color: #152C5B;">Anfitr</span><span style="color: #3252DF;">tr</span>
         </h1>
       </a>
     </div>
@@ -32,18 +32,20 @@
     <!-- Header -->
     <header class="flex justify-between items-center mb-8">
       <div>
-        <h2 class="text-2xl font-semibold mb-1" style="color: #152C5B;">Hola {{usuario.nombre}}</h2>
+        <h2 class="text-2xl font-semibold mb-1" style="color: #152C5B;">Hola {{usuarioActual?.nombre}}</h2>
         <p class="text-gray-400">Que tengas un buen día</p>
       </div>
 
       <div class="relative">
         <div class="flex items-center gap-4 cursor-pointer px-3 py-1 rounded-lg hover:bg-gray-50 transition-all" (click)="toggleMenuPerfil()">
           <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-            {{usuario.nombre.charAt(0)}}
+            <img class="w-12 h-12 rounded-full object-cover border-2 border-gray-300"
+             [src]="usuarioActual?.fotoPerfil" 
+              alt="{{usuarioActual?.nombre}}">
           </div>
           <div class="flex flex-col">
-            <span class="font-semibold" style="color: #152C5B;">{{usuario.nombre}}</span>
-            <span class="text-sm text-gray-400">{{usuario.rol}}</span>
+            <span class="font-semibold" style="color: #152C5B;">{{usuarioActual?.nombre}}</span>
+            <span class="text-sm text-gray-400">{{usuarioActual?.rol}}</span>
           </div>
           <span class="text-xs text-gray-600 transition-transform" [class.rotate-180]="mostrarMenuPerfil">▼</span>
         </div>
