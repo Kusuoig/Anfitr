@@ -27,15 +27,36 @@ export class LoginModalComponent {
   }
 
   login() {
-    const success = this.authService.login(this.email, this.password);
+    // Limpiar mensaje de error previo
+    this.errorMessage = '';
 
-    if (success) {
-      this.modalService.close();
-      this.email = '';
-      this.password = '';
-      this.errorMessage = '';
-    } else {
-      this.errorMessage = 'Usuario o contraseña incorrectos';
+    // Validar campos
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Por favor, completa todos los campos';
+      return;
     }
+
+    // Llamar al servicio de autenticación
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        if (response.success) {
+          // Login exitoso
+          this.modalService.close();
+          this.email = '';
+          this.password = '';
+          this.errorMessage = '';
+          
+          // Redirigir al dashboard o página principal
+          console.log('Login exitoso');
+        } else {
+          // Login fallido
+          this.errorMessage = response.message || 'Usuario o contraseña incorrectos';
+        }
+      },
+      error: (error) => {
+        console.error('Error en login:', error);
+        this.errorMessage = 'Error al conectar con el servidor. Por favor, intenta de nuevo.';
+      }
+    });
   }
 }
