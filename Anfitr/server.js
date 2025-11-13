@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const roomRoutes = require('./src/routes/rooms');
 
 const connectDB = require('./src/config/database');
 
@@ -14,6 +15,8 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api/rooms', roomRoutes);
+
 
 app.get('/', (req, res) => {
   res.json({

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService, Usuario } from '../../services/auth.service';
+import { HabitacionService } from '../../services/habitacion.service';
 
 interface Habitacion {
   id: string;
@@ -36,12 +37,9 @@ interface FormularioHabitacion {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './mis-habitaciones.component.html',
-
 })
 export class MisHabitacionesComponent implements OnInit {
-
   usuarioActual: Usuario | null = null;
-
   busqueda: string = '';
   mostrarMenuPerfil: boolean = false;
   mostrarFormulario: boolean = false;
@@ -62,37 +60,45 @@ export class MisHabitacionesComponent implements OnInit {
     imagen3: ''
   };
 
-  habitaciones: Habitacion[] = [
-    {
-      id: '1',
-      nombre: 'Blue Origin Farm',
-      fechaCreacion: 'June 16, 2025',
-      descripcion: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      deshabilitada: false
-    },
-    {
-      id: '2',
-      nombre: 'Sunset Villa',
-      fechaCreacion: 'July 5, 2025',
-      descripcion: 'Hermosa villa con vista al mar, perfecta para unas vacaciones relajantes.',
-      deshabilitada: false
-    },
-    {
-      id: '3',
-      nombre: 'Mountain Retreat',
-      fechaCreacion: 'August 10, 2025',
-      descripcion: 'Cabaña acogedora en las montañas, ideal para escapadas de fin de semana.',
-      deshabilitada: true
-    }
-  ];
-
+  habitaciones: Habitacion[] = [];
   habitacionesFiltradas: Habitacion[] = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private habitacionService: HabitacionService
+  ) {}
 
   ngOnInit() {
-    this.habitacionesFiltradas = this.habitaciones;
     this.usuarioActual = this.authService.getUsuarioActual();
+    this.habitacionesFiltradas = this.habitaciones;
+    if (this.usuarioActual && this.usuarioActual.id) {
+      this.cargarMisHabitaciones();
+    }
+  }
+
+  cargarMisHabitaciones() {
+    if (!this.usuarioActual || !this.usuarioActual.id) return;
+    this.habitacionService.getMisHabitaciones(this.usuarioActual.id).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.habitaciones = res.data.map((r: any) => ({
+            id: r._id,
+            nombre: r.nombre,
+            fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
+            descripcion: r.descripcion,
+            deshabilitada: r.deshabilitada || false,
+            direccion: r.direccion,
+            ciudad: r.ciudad,
+            codigoPostal: r.codigoPostal,
+            precioNoche: r.precio,
+            numeroHabitaciones: r.capacidad,
+            numeroBanos: r.numeroBanos
+          }));
+          this.habitacionesFiltradas = this.habitaciones;
+        }
+      },
+      error: (err) => console.error('Error cargando habitaciones:', err)
+    });
   }
 
   buscarHabitaciones() {
@@ -100,11 +106,10 @@ export class MisHabitacionesComponent implements OnInit {
       this.habitacionesFiltradas = this.habitaciones;
       return;
     }
-
     const termino = this.busqueda.toLowerCase();
-    this.habitacionesFiltradas = this.habitaciones.filter(habitacion =>
-      habitacion.nombre.toLowerCase().includes(termino) ||
-      habitacion.descripcion.toLowerCase().includes(termino)
+    this.habitacionesFiltradas = this.habitaciones.filter(h =>
+      h.nombre.toLowerCase().includes(termino) ||
+      h.descripcion.toLowerCase().includes(termino)
     );
   }
 
@@ -139,9 +144,7 @@ export class MisHabitacionesComponent implements OnInit {
 
   deshabilitarHabitacion(habitacionId: string) {
     const habitacion = this.habitaciones.find(h => h.id === habitacionId);
-    if (habitacion) {
-      habitacion.deshabilitada = !habitacion.deshabilitada;
-    }
+    if (habitacion) habitacion.deshabilitada = !habitacion.deshabilitada;
   }
 
   nuevaHabitacion() {
@@ -189,13 +192,9 @@ export class MisHabitacionesComponent implements OnInit {
   onFileSelected(event: any, numeroImagen: number) {
     const file = event.target.files[0];
     if (file) {
-      if (numeroImagen === 1) {
-        this.formulario.imagen1 = file.name;
-      } else if (numeroImagen === 2) {
-        this.formulario.imagen2 = file.name;
-      } else if (numeroImagen === 3) {
-        this.formulario.imagen3 = file.name;
-      }
+      if (numeroImagen === 1) this.formulario.imagen1 = file.name;
+      else if (numeroImagen === 2) this.formulario.imagen2 = file.name;
+      else if (numeroImagen === 3) this.formulario.imagen3 = file.name;
     }
   }
 
@@ -205,44 +204,54 @@ export class MisHabitacionesComponent implements OnInit {
       return;
     }
 
-    if (this.modoEdicion && this.habitacionEditando) {
-      // Editar habitación existente
-      const index = this.habitaciones.findIndex(h => h.id === this.habitacionEditando);
-      if (index !== -1) {
-        this.habitaciones[index] = {
-          ...this.habitaciones[index],
-          nombre: this.formulario.nombre,
-          descripcion: this.formulario.descripcion,
-          direccion: this.formulario.direccion,
-          ciudad: this.formulario.ciudad,
-          codigoPostal: this.formulario.codigoPostal,
-          precioNoche: this.formulario.precioNoche!,
-          numeroHabitaciones: this.formulario.numeroHabitaciones!,
-          numeroBanos: this.formulario.numeroBanos!
-        };
-      }
-      alert('Habitación actualizada exitosamente');
-    } else {
-      // Crear nueva habitación
-      const nuevaHabitacion: Habitacion = {
-        id: Date.now().toString(),
-        nombre: this.formulario.nombre,
-        descripcion: this.formulario.descripcion,
-        fechaCreacion: new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
-        deshabilitada: false,
-        direccion: this.formulario.direccion,
-        ciudad: this.formulario.ciudad,
-        codigoPostal: this.formulario.codigoPostal,
-        precioNoche: this.formulario.precioNoche!,
-        numeroHabitaciones: this.formulario.numeroHabitaciones!,
-        numeroBanos: this.formulario.numeroBanos!
-      };
-      this.habitaciones.push(nuevaHabitacion);
-      alert('Habitación creada exitosamente');
+    const usuario = this.authService.getUsuarioActual();
+    if (!usuario || !usuario.id) {
+      alert('Necesitas iniciar sesión para crear una habitación');
+      return;
     }
 
-    this.buscarHabitaciones();
-    this.cerrarFormulario();
+    const payload: any = {
+      nombre: this.formulario.nombre,
+      descripcion: this.formulario.descripcion,
+      precio: this.formulario.precioNoche,
+      capacidad: this.formulario.numeroHabitaciones,
+      direccion: this.formulario.direccion,
+      ciudad: this.formulario.ciudad,
+      codigoPostal: this.formulario.codigoPostal,
+      imagenes: [this.formulario.imagen1, this.formulario.imagen2, this.formulario.imagen3].filter(Boolean),
+      usuario: usuario.id
+    };
+
+    this.habitacionService.crearHabitacion(payload).subscribe({
+      next: (res) => {
+        if (res.success) {
+          const r = res.data;
+          const nueva = {
+            id: r._id,
+            nombre: r.nombre,
+            fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
+            descripcion: r.descripcion,
+            deshabilitada: r.deshabilitada || false,
+            direccion: r.direccion,
+            ciudad: r.ciudad,
+            codigoPostal: r.codigoPostal,
+            precioNoche: r.precio,
+            numeroHabitaciones: r.capacidad,
+            numeroBanos: r.numeroBanos
+          };
+          this.habitaciones.unshift(nueva);
+          this.buscarHabitaciones();
+          this.cerrarFormulario();
+          alert('Habitación creada exitosamente');
+        } else {
+          alert(res.message || 'Error al crear la habitación');
+        }
+      },
+      error: (err) => {
+        console.error('Error al crear habitación:', err);
+        alert('Error al conectar con el servidor');
+      }
+    });
   }
 
   volverInicio() {
@@ -255,12 +264,10 @@ export class MisHabitacionesComponent implements OnInit {
 
   irAPerfil() {
     console.log('Ir a perfil');
-    // Aquí puedes agregar la navegación: this.router.navigate(['/perfil']);
   }
 
   irAConfiguracion() {
     console.log('Ir a configuración');
-    // this.router.navigate(['/configuracion']);
   }
 
   cerrarSesion() {
