@@ -4,7 +4,7 @@
         <div class="mb-12">
             <a href="/" class="cursor-pointer">
                 <h1 class="text-3xl font-semibold">
-                    <span style="color: #152C5B;">Anfitr</span><span style="color: #3252DF;">tr</span>
+                    <span style="color: #152C5B;">Anfi</span><span style="color: #3252DF;">tr</span>
                 </h1>
             </a>
         </div>
@@ -40,7 +40,6 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="font-semibold" style="color: #152C5B;">{{usuarioActual?.nombre}}</span>
-                        <span class="text-sm text-gray-400">{{usuarioActual?.rol}}</span>
                     </div>
                     <span class="text-xs text-gray-600 transition-transform" [class.rotate-180]="mostrarMenuPerfil">▼</span>
                 </div>
@@ -101,11 +100,11 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" *ngIf="!cargando">
-                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:-translate-y-2 hover:shadow-2xl transition-all cursor-pointer" *ngFor="let reserva of reservasFiltradas">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:-translate-y-2 hover:shadow-2xl transition-all cursor-pointer" *ngFor="let reserva of reservasFiltradas" (click)="verDetalles(reserva._id)">
                     <div class="relative h-52 overflow-hidden">
-                        <img [src]="reserva.habitacion?.imagenes && reserva.habitacion.imagenes[0] ? reserva.habitacion.imagenes[0] : 'https://via.placeholder.com/400x300'" class="w-full h-full object-cover" />
+                        <img [src]="reserva.habitacion.imagenes && reserva.habitacion.imagenes[0] ? reserva.habitacion.imagenes[0] : 'https://via.placeholder.com/400x300'" class="w-full h-full object-cover" />
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-6">
-                            <h4 class="text-xl font-semibold mb-1">{{reserva.habitacion?.nombre}}</h4>
+                            <h4 class="text-xl font-semibold mb-1">{{reserva.habitacion.nombre}}</h4>
                             <p class="opacity-90" [ngClass]="{'bg-green-500': reserva.estado === 'confirmada', 'bg-red-500': reserva.estado === 'cancelada', 'bg-yellow-500': reserva.estado === 'pendiente'}" class="inline-block px-2 py-1 rounded text-xs">{{reserva.estado}}</p>
                         </div>
                     </div>
@@ -117,11 +116,25 @@
                         <div class="mb-4" *ngIf="reserva.numeroTarjetaUltimos4">
                             <p class="text-gray-500 text-sm">Pagado con tarjeta ****{{reserva.numeroTarjetaUltimos4}}</p>
                         </div>
+
+                        <!-- Detalles expandibles -->
+                        <div *ngIf="reservaExpandida === reserva._id" class="mb-4 p-4 bg-gray-50 rounded-lg space-y-2 animate-slideDown">
+                            <h5 class="font-semibold text-gray-800 mb-2">Detalles de la reserva</h5>
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <p><strong>ID:</strong> {{reserva._id}}</p>
+                                <p><strong>Estado:</strong> <span [ngClass]="{'text-green-600': reserva.estado === 'confirmada', 'text-red-600': reserva.estado === 'cancelada', 'text-yellow-600': reserva.estado === 'pendiente'}">{{reserva.estado}}</span></p>
+                                <p><strong>Fecha inicio:</strong> {{reserva.fechaInicio | date:'dd/MM/yyyy'}}</p>
+                                <p><strong>Fecha fin:</strong> {{reserva.fechaFin | date:'dd/MM/yyyy'}}</p>
+                                <p><strong>Duración:</strong> {{reserva.meses}} {{reserva.meses === 1 ? 'mes' : 'meses'}}</p>
+                                <p><strong>Monto total:</strong> ${{reserva.montoTotal}} MXN</p>
+                            </div>
+                        </div>
+
                         <div class="flex justify-between items-center pt-4 border-t border-gray-200">
                             <div>
                                 <strong class="text-xl font-semibold" style="color: #3252DF;">${{reserva.montoTotal}} MXN</strong>
                             </div>
-                            <button *ngIf="reserva.estado === 'confirmada'" class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 hover:scale-110 transition-all cursor-pointer w-9 h-9 flex items-center justify-center" (click)="eliminarReserva(reserva._id)">
+                            <button *ngIf="reserva.estado === 'confirmada'" class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 hover:scale-110 transition-all cursor-pointer w-9 h-9 flex items-center justify-center" (click)="eliminarReserva(reserva._id); $event.stopPropagation()">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>

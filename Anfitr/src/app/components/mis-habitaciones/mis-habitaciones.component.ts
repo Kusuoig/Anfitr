@@ -10,6 +10,7 @@ interface Habitacion {
   fechaCreacion: string;
   descripcion: string;
   deshabilitada: boolean;
+  activa: boolean;
   direccion?: string;
   ciudad?: string;
   codigoPostal?: string;
@@ -89,6 +90,7 @@ export class MisHabitacionesComponent implements OnInit {
             fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
             descripcion: r.descripcion,
             deshabilitada: r.deshabilitada || false,
+            activa: r.activa !== undefined ? r.activa : true,
             direccion: r.direccion,
             ciudad: r.ciudad,
             codigoPostal: r.codigoPostal,
@@ -157,10 +159,6 @@ export class MisHabitacionesComponent implements OnInit {
     }
   }
 
-  deshabilitarHabitacion(habitacionId: string) {
-    const habitacion = this.habitaciones.find(h => h.id === habitacionId);
-    if (habitacion) habitacion.deshabilitada = !habitacion.deshabilitada;
-  }
 
   nuevaHabitacion() {
     this.modoEdicion = false;
@@ -262,6 +260,7 @@ export class MisHabitacionesComponent implements OnInit {
                 fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
                 descripcion: r.descripcion,
                 deshabilitada: r.deshabilitada || false,
+                activa: r.activa !== undefined ? r.activa : true,
                 direccion: r.direccion,
                 ciudad: r.ciudad,
                 codigoPostal: r.codigoPostal,
@@ -293,6 +292,7 @@ export class MisHabitacionesComponent implements OnInit {
               fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
               descripcion: r.descripcion,
               deshabilitada: r.deshabilitada || false,
+              activa: r.activa !== undefined ? r.activa : true,
               direccion: r.direccion,
               ciudad: r.ciudad,
               codigoPostal: r.codigoPostal,

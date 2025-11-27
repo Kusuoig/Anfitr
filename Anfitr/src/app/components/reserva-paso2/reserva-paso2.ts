@@ -178,11 +178,11 @@ export class ReservaPaso2 implements OnInit {
   // En tu componente .ts
 formatearFechaVencimiento(event: any) {
   let value = event.target.value.replace(/\D/g, ''); // Remover todo excepto números
-  
+
   if (value.length >= 2) {
     value = value.substring(0, 2) + '/' + value.substring(2, 4);
   }
-  
+
   this.fechaVencimiento = value;
 }
 
