@@ -8,6 +8,7 @@ import { ReservaPaso2 } from './components/reserva-paso2/reserva-paso2';
 import { ReservaConfirmacion } from './components/reserva-paso3/reserva-confirmacion';
 import { ReservasComponent } from './components/reservas/reservas.component';
 import { MisHabitacionesComponent } from './components/mis-habitaciones/mis-habitaciones.component';
+import { ConfiguracionComponent } from './components/configuracion/configuracion';
 
 export const routes: Routes = [
   { path: 'inicio',
@@ -43,6 +44,10 @@ export const routes: Routes = [
   {
     path: 'mis-habitaciones',
     component: MisHabitacionesComponent
+  },
+  {
+    path: 'configuracion',
+    component: ConfiguracionComponent
   },
   { path: '**',
     component: Inicio

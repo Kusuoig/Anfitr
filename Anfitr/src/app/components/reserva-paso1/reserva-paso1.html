@@ -41,14 +41,14 @@
         <div class="w-full md:w-1/2 p-6 flex flex-col justify-center">
           <div class="mb-6">
             <label class="block text-sm font-semibold mb-2" style="color: #152C5B;">
-              Tiempo de estadía
+              Tiempo de estadía (meses)
             </label>
             <div class="flex items-center">
-              <button (click)="decrementarDias()" class="w-8 h-8 rounded-l-lg bg-[#E74C3C] text-white cursor-pointer hover:bg-red-200 flex items-center justify-center pb-1 font-bold text-2xl">-</button>
+              <button (click)="decrementarMeses()" class="w-8 h-8 rounded-l-lg bg-[#E74C3C] text-white cursor-pointer hover:bg-red-200 flex items-center justify-center pb-1 font-bold text-2xl">-</button>
               <div class="inline-flex items-center bg-gray-200 h-8">
-                <input [(ngModel)]="dias" (change)="onDiasChange()" min="1" class="w-16 text-center text-xl bg-transparent border-none focus:ring-0">
+                <input [(ngModel)]="meses" (change)="onMesesChange()" min="1" class="w-16 text-center text-xl bg-transparent border-none focus:ring-0">
               </div>
-              <button (click)="incrementarDias()" class="w-8 h-8 rounded-r-lg bg-[#1ABC9C] text-white cursor-pointer hover:bg-green-200 flex items-center justify-center pb-1 font-bold text-xl">+</button>
+              <button (click)="incrementarMeses()" class="w-8 h-8 rounded-r-lg bg-[#1ABC9C] text-white cursor-pointer hover:bg-green-200 flex items-center justify-center pb-1 font-bold text-xl">+</button>
             </div>
           </div>
 
@@ -69,7 +69,7 @@
               <span class="text-lg md:text-xl pl-3 font-bold" style="color: #1ABC9C;">${{ precioTotal }} MXN</span>
             </div>
             <p class="text-xs text-gray-500 mt-1">
-              ${{ propiedad?.precio }} MXN × {{ dias }} {{ textoDias }}
+              ${{ propiedad?.precio }} MXN × {{ meses }} {{ textoMeses }}
             </p>
           </div>
         </div>

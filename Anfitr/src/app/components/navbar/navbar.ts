@@ -65,8 +65,7 @@ export class Navbar implements OnInit {
 
   irAConfiguracion() {
     this.mostrarMenuPerfil = false;
-    console.log('Ir a configuración');
-    // this.router.navigate(['/configuracion']);
+    this.router.navigate(['/configuracion']);
   }
 
   cerrarSesion() {

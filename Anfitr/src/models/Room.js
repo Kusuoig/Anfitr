@@ -5,6 +5,7 @@ const roomSchema = new mongoose.Schema({
   descripcion: { type: String, trim: true },
   precio: { type: Number, required: [true, 'El precio es requerido'], min: 0 },
   capacidad: { type: Number, required: [true, 'La capacidad es requerida'], min: 1 },
+  numeroBanos: { type: Number, min: 1 },
   direccion: { type: String },
   ciudad: { type: String },
   codigoPostal: { type: String },

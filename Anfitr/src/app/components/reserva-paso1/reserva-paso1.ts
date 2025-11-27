@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ReservaPaso1 implements OnInit {
   propiedad: any;
-  dias: number = 1;
+  meses: number = 1;
   fechaInicio: string = '';
   fechaFin: string = '';
   precioTotal: number = 0;
@@ -26,10 +26,10 @@ export class ReservaPaso1 implements OnInit {
     const hoy = new Date();
     this.fechaInicio = this.formatearFecha(hoy);
 
-    // Fecha fin es un día después
-    const manana = new Date(hoy);
-    manana.setDate(manana.getDate() + 1);
-    this.fechaFin = this.formatearFecha(manana);
+    // Fecha fin es un mes después
+    const unMesDespues = new Date(hoy);
+    unMesDespues.setMonth(unMesDespues.getMonth() + 1);
+    this.fechaFin = this.formatearFecha(unMesDespues);
 
     // Obtener datos de la propiedad (en producción vendría de un servicio)
     this.route.queryParams.subscribe(params => {
@@ -51,58 +51,65 @@ export class ReservaPaso1 implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  calcularDiasEntreFechas() {
+  calcularMesesEntreFechas() {
     const inicio = new Date(this.fechaInicio);
     const fin = new Date(this.fechaFin);
-    const diferencia = fin.getTime() - inicio.getTime();
-    const dias = Math.ceil(diferencia / (1000 * 3600 * 24));
-    return dias > 0 ? dias : 1;
+    
+    let meses = (fin.getFullYear() - inicio.getFullYear()) * 12;
+    meses += fin.getMonth() - inicio.getMonth();
+    
+    // Si el día final es menor que el día inicial, restamos un mes
+    if (fin.getDate() < inicio.getDate()) {
+      meses--;
+    }
+    
+    return meses > 0 ? meses : 1;
   }
 
   onFechaInicioChange() {
     const inicio = new Date(this.fechaInicio);
     const fin = new Date(inicio);
-    fin.setDate(fin.getDate() + this.dias);
+    fin.setMonth(fin.getMonth() + this.meses);
     this.fechaFin = this.formatearFecha(fin);
     this.calcularPrecioTotal();
   }
 
   onFechaFinChange() {
-    this.dias = this.calcularDiasEntreFechas();
+    this.meses = this.calcularMesesEntreFechas();
     this.calcularPrecioTotal();
   }
 
-  incrementarDias() {
-    this.dias++;
+  incrementarMeses() {
+    this.meses++;
     const inicio = new Date(this.fechaInicio);
     const fin = new Date(inicio);
-    fin.setDate(fin.getDate() + this.dias);
+    fin.setMonth(fin.getMonth() + this.meses);
     this.fechaFin = this.formatearFecha(fin);
     this.calcularPrecioTotal();
   }
 
-  decrementarDias() {
-    if (this.dias > 1) {
-      this.dias--;
+  decrementarMeses() {
+    if (this.meses > 1) {
+      this.meses--;
       const inicio = new Date(this.fechaInicio);
       const fin = new Date(inicio);
-      fin.setDate(fin.getDate() + this.dias);
+      fin.setMonth(fin.getMonth() + this.meses);
       this.fechaFin = this.formatearFecha(fin);
       this.calcularPrecioTotal();
     }
   }
 
-  onDiasChange() {
-    if (this.dias < 1) this.dias = 1;
+  onMesesChange() {
+    if (this.meses < 1) this.meses = 1;
     const inicio = new Date(this.fechaInicio);
     const fin = new Date(inicio);
-    fin.setDate(fin.getDate() + this.dias);
+    fin.setMonth(fin.getMonth() + this.meses);
     this.fechaFin = this.formatearFecha(fin);
     this.calcularPrecioTotal();
   }
 
   calcularPrecioTotal() {
-    this.precioTotal = this.propiedad.precio * this.dias;
+    this.precioTotal = this.propiedad.precio * this.meses;
   }
 
   cancelar() {
@@ -118,7 +125,7 @@ export class ReservaPaso1 implements OnInit {
         titulo: this.propiedad.titulo,
         ubicacion: this.propiedad.ubicacion,
         precio: this.propiedad.precio,
-        dias: this.dias,
+        meses: this.meses,
         total: this.precioTotal,
         fechaInicio: this.fechaInicio,
         fechaFin: this.fechaFin
@@ -126,7 +133,7 @@ export class ReservaPaso1 implements OnInit {
     });
   }
 
-  get textoDias(): string {
-    return this.dias === 1 ? 'día' : 'días';
+  get textoMeses(): string {
+    return this.meses === 1 ? 'mes' : 'meses';
   }
 }

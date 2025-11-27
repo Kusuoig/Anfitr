@@ -5,6 +5,7 @@
     "tailwindcss": "^4.1.12"
   },
   "dependencies": {
-    "mongodb": "^6.18.0"
+    "mongodb": "^6.18.0",
+    "multer": "^2.0.2"
   }
 }

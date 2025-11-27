@@ -16,6 +16,8 @@ interface Habitacion {
   precioNoche?: number;
   numeroHabitaciones?: number;
   numeroBanos?: number;
+  imagenes?: string[];
+  imagenPrincipal?: string;
 }
 
 interface FormularioHabitacion {
@@ -27,9 +29,9 @@ interface FormularioHabitacion {
   precioNoche: number | null;
   numeroHabitaciones: number | null;
   numeroBanos: number | null;
-  imagen1: string;
-  imagen2: string;
-  imagen3: string;
+  imagen1: File | null;
+  imagen2: File | null;
+  imagen3: File | null;
 }
 
 @Component({
@@ -55,9 +57,9 @@ export class MisHabitacionesComponent implements OnInit {
     precioNoche: null,
     numeroHabitaciones: null,
     numeroBanos: null,
-    imagen1: '',
-    imagen2: '',
-    imagen3: ''
+    imagen1: null,
+    imagen2: null,
+    imagen3: null
   };
 
   habitaciones: Habitacion[] = [];
@@ -92,7 +94,9 @@ export class MisHabitacionesComponent implements OnInit {
             codigoPostal: r.codigoPostal,
             precioNoche: r.precio,
             numeroHabitaciones: r.capacidad,
-            numeroBanos: r.numeroBanos
+            numeroBanos: r.numeroBanos,
+            imagenes: r.imagenes || [],
+            imagenPrincipal: r.imagenes && r.imagenes.length > 0 ? `http://localhost:3000/${r.imagenes[0]}` : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800'
           }));
           this.habitacionesFiltradas = this.habitaciones;
         }
@@ -127,9 +131,9 @@ export class MisHabitacionesComponent implements OnInit {
         precioNoche: habitacion.precioNoche || null,
         numeroHabitaciones: habitacion.numeroHabitaciones || null,
         numeroBanos: habitacion.numeroBanos || null,
-        imagen1: '',
-        imagen2: '',
-        imagen3: ''
+        imagen1: null,
+        imagen2: null,
+        imagen3: null
       };
       this.mostrarFormulario = true;
     }
@@ -137,8 +141,19 @@ export class MisHabitacionesComponent implements OnInit {
 
   eliminarHabitacion(habitacionId: string) {
     if (confirm('¿Estás seguro de que deseas eliminar esta habitación?')) {
-      this.habitaciones = this.habitaciones.filter(h => h.id !== habitacionId);
-      this.buscarHabitaciones();
+      this.habitacionService.eliminarHabitacion(habitacionId).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.habitaciones = this.habitaciones.filter(h => h.id !== habitacionId);
+            this.buscarHabitaciones();
+            alert('Habitación eliminada correctamente');
+          }
+        },
+        error: (err) => {
+          console.error('Error al eliminar habitación:', err);
+          alert('Error al eliminar la habitación');
+        }
+      });
     }
   }
 
@@ -169,9 +184,9 @@ export class MisHabitacionesComponent implements OnInit {
       precioNoche: null,
       numeroHabitaciones: null,
       numeroBanos: null,
-      imagen1: '',
-      imagen2: '',
-      imagen3: ''
+      imagen1: null,
+      imagen2: null,
+      imagen3: null
     };
   }
 
@@ -192,9 +207,14 @@ export class MisHabitacionesComponent implements OnInit {
   onFileSelected(event: any, numeroImagen: number) {
     const file = event.target.files[0];
     if (file) {
-      if (numeroImagen === 1) this.formulario.imagen1 = file.name;
-      else if (numeroImagen === 2) this.formulario.imagen2 = file.name;
-      else if (numeroImagen === 3) this.formulario.imagen3 = file.name;
+      // Validar que sea imagen
+      if (!file.type.startsWith('image/')) {
+        alert('Por favor selecciona solo imágenes');
+        return;
+      }
+      if (numeroImagen === 1) this.formulario.imagen1 = file;
+      else if (numeroImagen === 2) this.formulario.imagen2 = file;
+      else if (numeroImagen === 3) this.formulario.imagen3 = file;
     }
   }
 
@@ -210,48 +230,90 @@ export class MisHabitacionesComponent implements OnInit {
       return;
     }
 
-    const payload: any = {
-      nombre: this.formulario.nombre,
-      descripcion: this.formulario.descripcion,
-      precio: this.formulario.precioNoche,
-      capacidad: this.formulario.numeroHabitaciones,
-      direccion: this.formulario.direccion,
-      ciudad: this.formulario.ciudad,
-      codigoPostal: this.formulario.codigoPostal,
-      imagenes: [this.formulario.imagen1, this.formulario.imagen2, this.formulario.imagen3].filter(Boolean),
-      usuario: usuario.id
-    };
+    // Crear FormData para enviar archivos
+    const formData = new FormData();
+    formData.append('nombre', this.formulario.nombre);
+    formData.append('descripcion', this.formulario.descripcion);
+    formData.append('precio', this.formulario.precioNoche!.toString());
+    formData.append('capacidad', this.formulario.numeroHabitaciones!.toString());
+    formData.append('numeroBanos', this.formulario.numeroBanos!.toString());
+    formData.append('direccion', this.formulario.direccion);
+    formData.append('ciudad', this.formulario.ciudad);
+    formData.append('codigoPostal', this.formulario.codigoPostal);
+    formData.append('usuario', usuario.id);
 
-    this.habitacionService.crearHabitacion(payload).subscribe({
-      next: (res) => {
-        if (res.success) {
-          const r = res.data;
-          const nueva = {
-            id: r._id,
-            nombre: r.nombre,
-            fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
-            descripcion: r.descripcion,
-            deshabilitada: r.deshabilitada || false,
-            direccion: r.direccion,
-            ciudad: r.ciudad,
-            codigoPostal: r.codigoPostal,
-            precioNoche: r.precio,
-            numeroHabitaciones: r.capacidad,
-            numeroBanos: r.numeroBanos
-          };
-          this.habitaciones.unshift(nueva);
-          this.buscarHabitaciones();
-          this.cerrarFormulario();
-          alert('Habitación creada exitosamente');
-        } else {
-          alert(res.message || 'Error al crear la habitación');
+    // Agregar imágenes si existen
+    if (this.formulario.imagen1) formData.append('imagenes', this.formulario.imagen1);
+    if (this.formulario.imagen2) formData.append('imagenes', this.formulario.imagen2);
+    if (this.formulario.imagen3) formData.append('imagenes', this.formulario.imagen3);
+
+    // Si estamos en modo edición, actualizar; si no, crear
+    if (this.modoEdicion && this.habitacionEditando) {
+      this.habitacionService.actualizarHabitacion(this.habitacionEditando, formData).subscribe({
+        next: (res) => {
+          if (res.success) {
+            // Actualizar en la lista local
+            const index = this.habitaciones.findIndex(h => h.id === this.habitacionEditando);
+            if (index !== -1) {
+              const r = res.data;
+              this.habitaciones[index] = {
+                id: r._id,
+                nombre: r.nombre,
+                fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
+                descripcion: r.descripcion,
+                deshabilitada: r.deshabilitada || false,
+                direccion: r.direccion,
+                ciudad: r.ciudad,
+                codigoPostal: r.codigoPostal,
+                precioNoche: r.precio,
+                numeroHabitaciones: r.capacidad,
+                numeroBanos: r.numeroBanos
+              };
+            }
+            this.buscarHabitaciones();
+            this.cerrarFormulario();
+            alert('Habitación actualizada exitosamente');
+          } else {
+            alert(res.message || 'Error al actualizar la habitación');
+          }
+        },
+        error: (err) => {
+          console.error('Error al actualizar habitación:', err);
+          alert('Error al conectar con el servidor');
         }
-      },
-      error: (err) => {
-        console.error('Error al crear habitación:', err);
-        alert('Error al conectar con el servidor');
-      }
-    });
+      });
+    } else {
+      this.habitacionService.crearHabitacion(formData).subscribe({
+        next: (res) => {
+          if (res.success) {
+            const r = res.data;
+            const nueva = {
+              id: r._id,
+              nombre: r.nombre,
+              fechaCreacion: new Date(r.fechaCreacion || r.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
+              descripcion: r.descripcion,
+              deshabilitada: r.deshabilitada || false,
+              direccion: r.direccion,
+              ciudad: r.ciudad,
+              codigoPostal: r.codigoPostal,
+              precioNoche: r.precio,
+              numeroHabitaciones: r.capacidad,
+              numeroBanos: r.numeroBanos
+            };
+            this.habitaciones.unshift(nueva);
+            this.buscarHabitaciones();
+            this.cerrarFormulario();
+            alert('Habitación creada exitosamente');
+          } else {
+            alert(res.message || 'Error al crear la habitación');
+          }
+        },
+        error: (err) => {
+          console.error('Error al crear habitación:', err);
+          alert('Error al conectar con el servidor');
+        }
+      });
+    }
   }
 
   volverInicio() {

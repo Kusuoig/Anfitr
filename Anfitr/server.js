@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const roomRoutes = require('./src/routes/rooms');
+const pagosRoutes = require('./src/routes/pagos');
+const reservasRoutes = require('./src/routes/reservas');
 
 const connectDB = require('./src/config/database');
 
@@ -15,7 +18,13 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir archivos estáticos desde la carpeta uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/api/rooms', roomRoutes);
+app.use('/api/pagos', pagosRoutes);
+app.use('/api/reservas', reservasRoutes);
 
 
 app.get('/', (req, res) => {
